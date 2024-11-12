@@ -1,0 +1,1278 @@
+<html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wadi Shop - Daily Grocery Shop</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+  }
+  .header {
+    background-color: #CEECD4;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .logo {
+    width: 50px; /* Adjust the size of the logo */
+    height: auto; /* Keep aspect ratio */
+    margin-right: 10px; /* Space between the logo and text */
+    vertical-align: middle; /* Align the logo with the text */
+}
+                                                                                                        /* Boutton Assistance 3eme age*/
+  .assistance-btn {
+    position: fixed;
+    top: 10px;
+    right: 25px;
+    background-color: #CEECD4;
+    border: 5px;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    font-size: 60px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+  }
+  .assistance-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    z-index: 2000;
+    overflow-y: auto;
+  }
+  .assistance-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+    font-size: 1.2rem;
+  }
+  .close-assistance {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+                                                                                                          /* Rechercher */
+
+  .search-container {
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    background-color: #f0f0f0;
+  }
+  #searchInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  .search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+  }
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .search-result-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+  .search-result-info {
+    flex-grow: 1;
+  }
+  .search-result-name {
+    font-weight: bold;
+  }
+  .search-result-description {
+    font-size: 0.8em;
+    color: #666;
+  }
+  .search-result-add-to-cart {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+
+                                                                                                          /* Menus - Options - Barres de Nav */
+
+  .menu-bar {
+    background-color: #fff;
+    padding: 1rem;
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .menu-item {
+    padding: 0.5rem 1rem;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+  .menu-item.active {
+    background-color: #CEECD4;
+  }
+  .content {
+    padding: 1rem;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 40px;
+  }
+  .product-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+  }
+  .favorite-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #ccc;
+    transition: color 0.3s ease;
+  }
+  .favorite-icon.active {
+    color: #ff4d4d;
+  }
+  .product-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+  }
+  .product-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  .product-description {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+  .product-price {
+    color: #4CAF50;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  .add-to-cart {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+  }
+  .nav-item {
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+  }
+  .nav-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+                                                                                                          /* Mon panier */
+
+  .cart-view {
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    z-index: 1001;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+    padding: 1rem;
+  }
+  .cart-view.active {
+    transform: translateY(0);
+  }
+  .cart-header {
+    background-color: #CEECD4;
+    color: #fff;
+    padding: 1rem;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .close-cart {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+  }
+  .cart-items-container {
+    max-height: calc(100% - 160px);
+    overflow-y: auto;
+    padding: 1rem;
+  }
+  .cart-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  .cart-item-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  .cart-item-details {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cart-item-name {
+    font-weight: bold;
+  }
+  .cart-item-price-qty {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .cart-item-price {
+    color: #4CAF50;
+    font-weight: bold;
+  }
+  .cart-item-quantity {
+    display: flex;
+    align-items: center;
+  }
+  .quantity-btn {
+    background-color: #CEECD4;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.25rem;
+  }
+  .cart-summary, .cart-delivery-fee, .cart-total-amount {
+    padding: 0.5rem 0;
+    font-size: 1rem;
+  }
+  .cart-total-amount {
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-top: 1px solid #ddd;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+  .cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4d4d;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .cart-animation {
+    position: fixed;
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 1000;
+  }
+  .cart-summary {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  .cart-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  .cart-summary-label {
+    font-weight: bold;
+  }
+  .delivery-message {
+    font-size: 0.9em;
+    color: #ff4d4d;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+                                                                                                             /* Payments et check out process  */
+
+  .checkout-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .checkout-btn i {
+    margin-right: 0.5rem;
+  }
+                                                                                                              /* Page d'accueil */
+  #accueilPage {
+    text-align: center;
+  }
+  #addressInput {
+    width: 80%;
+    max-width: 400px;
+    padding: 0.5rem;
+    margin: 1rem 0;
+  }
+  #accueilPage button {
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .image-carousel {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  .carousel-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  .carousel-image.active {
+    opacity: 1;
+  }
+
+  #deliveryStatus {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+  #newsletterSignup {
+    display: none;
+  }
+
+
+                                                                                                          /* Chat */
+
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .chat-input {
+    display: flex;
+    padding: 20px;
+    display: none;
+  }
+  .chat-input input {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+  }
+  .chat-input button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+  .chat-message {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+  }
+  .chat-message.user {
+    text-align: right;
+  }
+  .chat-message.bot {
+    text-align: left;
+  }
+  .chat-bubble {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 80%;
+  }
+  .chat-message.user .chat-bubble {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .chat-message.bot .chat-bubble {
+    background-color: #f1f1f1;
+    color: black;
+  }
+  .chat-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  .chat-option-btn {
+    background-color: #CEECD4;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    margin: 10px 5px;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .chat-option-btn:hover {
+    background-color: #008f35;
+  }
+
+                                                                                                        /* Autres - A classer */
+
+  @media (max-width: 768px) {
+    .nav-bar {
+      z-index: 1000;
+    }
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .search-container {
+      padding: 5px;
+    }
+    #searchInput {
+      font-size: 14px;
+    }
+    .search-result-item {
+      padding: 5px;
+    }
+    .search-result-image {
+      width: 40px;
+      height: 40px;
+    }
+    .search-result-description {
+      font-size: 0.7em;
+    }
+  }
+  .qa-container {
+    margin-top: 20px;
+  }
+  .qa-item {
+    margin-bottom: 20px;
+  }
+  .qa-item h3 {
+    color: #4CAF50;
+    margin-bottom: 5px;
+  }
+
+
+  h1{
+    color: #2F965E;
+  }
+  h2{
+    color: #333333;
+  }
+
+
+</style>
+</head>
+<body>
+  <button id="assistanceBtn" class="assistance-btn" onclick="toggleAssistance()">👴</button>
+  
+  <div class="header">
+    <img src="logo.png" alt="Wadi Shop Logo" class="logo" />
+    <h1>InstaGrab</h1>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Rechercher un produit...">
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <div class="image-carousel">
+    <img src="https://cdn.pixabay.com/photo/2016/03/23/19/38/shopping-cart-1275480_1280.jpg" alt="Grocery shopping cart" class="carousel-image" onerror="handleImageError(this)">
+    <img src="https://cdn.pixabay.com/photo/2016/11/22/19/08/hangers-1850082_1280.jpg" alt="Clothing store" class="carousel-image" onerror="handleImageError(this)">
+    <img src="https://cdn.pixabay.com/photo/2015/09/21/14/24/supermarket-949913_1280.jpg" alt="Supermarket aisle" class="carousel-image" onerror="handleImageError(this)">
+    <img src="https://cdn.pixabay.com/photo/2016/11/29/09/00/doughnuts-1868573_1280.jpg" alt="Bakery display" class="carousel-image" onerror="handleImageError(this)">
+    <img src="https://cdn.pixabay.com/photo/2017/07/31/11/21/people-2557399_1280.jpg" alt="Farmer's market" class="carousel-image" onerror="handleImageError(this)">
+  </div>
+
+  <div id="accueilPage" class="page">
+    <h2>Bienvenue chez Wadi Shop</h2>
+    <p>Veuillez sélectionner votre adresse de livraison :</p>
+    <select id="addressInput">
+      <option value="">Sélectionnez votre adresse</option>
+      <option value="8820 Wädenswil - Hangenmoos">8820 Wädenswil - Hangenmoos</option>
+      <option value="8820 Wädenswil">8820 Wädenswil</option>
+      <option value="8804 Au ZH">8804 Au ZH</option>
+      <option value="8805 Richterswil">8805 Richterswil</option>
+      <option value="8833 Samstagern">8833 Samstagern</option>
+      <option value="8810 Horgen">8810 Horgen</option>
+      <option value="8816 Hirzel">8816 Hirzel</option>
+      <option value="8824 Schönenberg">8824 Schönenberg</option>
+      <option value="8832 Wollerau">8832 Wollerau</option>
+      <option value="8835 Feusisberg">8835 Feusisberg</option>
+    </select>
+    <button onclick="confirmDelivery()">Confirmer la livraison</button>
+    <p id="deliveryStatus"></p>
+    <div id="newsletterSignup" style="display: none;">
+      <p>Inscrivez-vous à notre newsletter pour être informé quand nous livrerons chez vous :</p>
+      <input type="email" id="newsletterEmail" placeholder="Votre adresse e-mail">
+      <button onclick="signupNewsletter()">S'inscrire</button>
+    </div>
+  </div>
+
+  <div id="menuPage" class="page" style="display: none;">
+    <div class="menu-bar">
+      <div class="menu-item active" onclick="showCategory('all')"><span class="category-icon">🛒</span>Tout voir</div>
+      <div class="menu-item" onclick="showCategory('seasonal')"><span class="category-icon">🍂</span>Produits de saison</div>
+      <div class="menu-item" onclick="showCategory('promotions')"><span class="category-icon">🏷️</span>Promotions</div>
+      <div class="menu-item" onclick="showCategory('fruits')"><span class="category-icon">🍎</span>Fruits</div>
+      <div class="menu-item" onclick="showCategory('vegetables')"><span class="category-icon">🥕</span>Légumes</div>
+      <div class="menu-item" onclick="showCategory('dairy')"><span class="category-icon">🥛</span>Produits laitiers</div>
+      <div class="menu-item" onclick="showCategory('bakery')"><span class="category-icon">🥖</span>Boulangerie</div>
+      <div class="menu-item" onclick="showCategory('meat')"><span class="category-icon">🥩</span>Viande</div>
+      <div class="menu-item" onclick="showCategory('fish')"><span class="category-icon">🐟</span>Poisson</div>
+      <div class="menu-item" onclick="showCategory('frozen')"><span class="category-icon">❄️</span>Surgelés</div>
+      <div class="menu-item" onclick="showCategory('beverages')"><span class="category-icon">🥤</span>Boissons</div>
+      <div class="menu-item" onclick="showCategory('snacks')"><span class="category-icon">🍿</span>Snacks</div>
+      <div class="menu-item" onclick="showCategory('household')"><span class="category-icon">🧼</span>Produits ménagers</div>
+      <div class="menu-item" onclick="showCategory('personal_care')"><span class="category-icon">🧴</span>Soins personnels</div>
+      <div class="menu-item" onclick="showFavorites()"><span class="category-icon">❤️</span>Favoris</div>
+    </div>
+
+    <div class="content">
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-item" onclick="showHome()">
+      <div class="nav-icon">🏠</div>
+      <div>Accueil</div>
+    </div>
+    <div class="nav-item" onclick="showMenu()">
+      <div class="nav-icon">📋</div>
+      <div>Menu</div>
+    </div>
+    <div class="nav-item" onclick="showFavorites()">
+      <div class="nav-icon">❤️</div>
+      <div>Favoris</div>
+    </div>
+    <div class="nav-item" onclick="toggleCart()">
+      <div class="nav-icon">🛒</div>
+      <div>Panier</div>
+      <span class="cart-badge" id="cartBadge">0</span>
+
+    </div>
+  </div>
+
+  <div class="cart-view" id="cartView">
+    <div class="cart-header">
+      <h2><i class="fas fa-shopping-cart"></i> Votre Panier</h2>
+      <button class="close-cart" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-items-container" id="cartItems"></div>
+    <div class="cart-total" id="cartTotal"></div>
+  </div>
+
+  <div id="assistancePopup" class="assistance-popup">
+    <div class="assistance-content">
+      <h2>Assistance</h2>
+      <button class="close-assistance" onclick="toggleAssistance()">×</button>
+      <div class="chat-container">
+        <div id="chatMessages" class="chat-messages"></div>
+        <div class="chat-input" id="chatInput">
+          <input type="text" id="userInput" placeholder="Tapez votre message...">
+          <button onclick="sendMessage()">Envoyer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+    function safeGetElement(id) {
+      const element = document.getElementById(id);
+      if (!element) {
+        console.warn(`Element with id '${id}' not found`);
+      }
+      return element;
+    }
+
+    window.onerror = function(message, source, lineno, colno, error) {
+      console.error("Caught global error:", error);
+    };
+
+    let selectedPostalCode = '';
+    const products = [
+      { id: 1, name: "Pommes Golden", price: 2.99, category: "fruits", image: "https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg", description: "Environ 250g (2-3 pommes)" },
+      { id: 2, name: "Bananes", price: 1.99, category: "fruits", image: "https://cdn.pixabay.com/photo/2015/03/30/12/37/bananas-698608_1280.jpg", description: "Environ 250g (2-3 bananes)" },
+      { id: 3, name: "Oranges", price: 3.49, category: "fruits", image: "https://cdn.pixabay.com/photo/2017/01/20/15/06/oranges-1995056_1280.jpg", description: "Environ 250g (1-2 oranges)" },
+      { id: 4, name: "Fraises", price: 4.99, category: "fruits", image: "https://cdn.pixabay.com/photo/2018/04/29/11/54/strawberries-3359755_1280.jpg", description: "Environ 250g (2-3 fraises)" },
+      { id: 5, name: "Raisins", price: 3.99, category: "fruits", image: "https://cdn.pixabay.com/photo/2015/03/26/09/45/grapes-690230_1280.jpg", description: "Environ 250g" },
+      { id: 6, name: "Pêches", price: 2.99, category: "fruits", image: "https://cdn.pixabay.com/photo/2016/06/01/16/56/peach-1436332_1280.jpg", description: "Environ 250g (2-3 pêches)" },
+      { id: 7, name: "Mangues", price: 2.49, category: "fruits", image: "https://cdn.pixabay.com/photo/2016/07/23/08/24/mango-1530073_1280.jpg", description: "Environ 250g (1-2 mangues)" },
+      { id: 8, name: "Ananas", price: 3.99, category: "fruits", image: "https://cdn.pixabay.com/photo/2016/03/05/20/02/pineapple-1239296_1280.jpg", description: "Environ 1kg" },
+      { id: 9, name: "Kiwis", price: 2.99, category: "fruits", image: "https://cdn.pixabay.com/photo/2013/07/12/16/34/kiwi-73355_1280.jpg", description: "Environ 250g (3-4 kiwis)" },
+      { id: 10, name: "Poires", price: 2.79, category: "fruits", image: "https://cdn.pixabay.com/photo/2019/09/03/17/43/pear-4473461_1280.jpg", description: "Environ 250g (2-3 poires)" },
+      { id: 11, name: "Carottes", price: 1.49, category: "vegetables", image: "https://cdn.pixabay.com/photo/2015/03/14/14/00/carrots-673184_1280.jpg", description: "Environ 300g (4-6 carottes)" },
+      { id: 12, name: "Tomates", price: 2.99, category: "vegetables", image: "https://cdn.pixabay.com/photo/2011/03/16/16/01/tomatoes-5356_1280.jpg", description: "Environ 500g (3-5 tomates)" },
+      { id: 13, name: "Concombres", price: 1.99, category: "vegetables", image: "https://cdn.pixabay.com/photo/2015/07/17/13/44/cucumbers-849269_1280.jpg", description: "Environ 500g (2-3 concombres)" },
+      { id: 14, name: "Laitue", price: 1.79, category: "vegetables", image: "https://cdn.pixabay.com/photo/2016/10/08/20/27/lettuce-1728922_1280.jpg", description: "Environ 300g" },
+      { id: 15, name: "Poivrons", price: 2.49, category: "vegetables", image: "https://cdn.pixabay.com/photo/2013/07/12/16/59/bell-peppers-73387_1280.jpg", description: "Environ 250g (2-3 poivrons)" },
+      { id: 16, name: "Brocoli", price: 2.99, category: "vegetables", image: "https://cdn.pixabay.com/photo/2016/04/16/12/22/broccoli-1323843_1280.jpg", description: "Environ 300g" },
+      { id: 17, name: "Aubergines", price: 2.29, category: "vegetables", image: "https://cdn.pixabay.com/photo/2013/07/12/16/48/eggplant-73354_1280.jpg", description: "Environ 300g" },
+      { id: 18, name: "Courgettes", price: 1.99, category: "vegetables", image: "https://cdn.pixabay.com/photo/2018/04/25/15/17/zucchini-3348464_1280.jpg", description: "Environ 300g" },
+      { id: 19, name: "Oignons", price: 1.49, category: "vegetables", image: "https://cdn.pixabay.com/photo/2013/06/06/03/17/onion-66398_1280.jpg", description: "Environ 500g (2-3 oignons)" },
+      { id: 20, name: "Pommes de terre", price: 2.99, category: "vegetables", image: "https://cdn.pixabay.com/photo/2013/07/12/16/19/potatoes-73336_1280.jpg", description: "Environ 1kg" },
+      { id: 21, name: "Lait entier", price: 2.49, category: "dairy", image: "https://cdn.pixabay.com/photo/2017/07/05/15/41/milk-2474993_1280.jpg", description: "1 litre" },
+      { id: 22, name: "Fromage Emmental", price: 3.99, category: "dairy", image: "https://cdn.pixabay.com/photo/2015/12/07/22/27/cheese-1081082_1280.jpg", description: "200g" },
+      { id: 23, name: "Yaourt nature", price: 2.29, category: "dairy", image: "https://cdn.pixabay.com/photo/2016/03/10/23/06/yogurt-1243580_1280.jpg", description: "125g" },
+      { id: 24, name: "Beurre", price: 2.99, category: "dairy", image: "https://cdn.pixabay.com/photo/2017/02/01/01/09/butter-1973592_1280.jpg", description: "250g" },
+      { id: 25, name: "Crème fraîche", price: 1.99, category: "dairy", image: "https://cdn.pixabay.com/photo/2016/12/08/10/43/cream-1902301_1280.jpg", description: "200g" },
+      { id: 26, name: "Mozzarella", price: 3.49, category: "dairy", image: "https://cdn.pixabay.com/photo/2014/11/15/16/43/cheese-52900_1280.jpg", description: "125g" },
+      { id: 27, name: "Fromage blanc", price: 2.79, category: "dairy", image: "https://cdn.pixabay.com/photo/2019/02/19/11/43/cottage-cheese-3656818_1280.jpg", description: "250g" },
+      { id: 28, name: "Camembert", price: 3.99, category: "dairy", image: "https://cdn.pixabay.com/photo/2016/09/08/19/32/cheese-4479438_1280.jpg", description: "150g" },
+      { id: 29, name: "Lait d'amande", price: 2.99, category: "dairy", image: "https://cdn.pixabay.com/photo/2016/11/29/09/06/almond-milk-1869201_1280.jpg", description: "1 litre" },
+      { id: 30, name: "Fromage de chèvre", price: 4.49, category: "dairy", image: "https://cdn.pixabay.com/photo/2014/09/01/13/20/chevre-433732_1280.jpg", description: "150g" },
+      { id: 31, name: "Baguette", price: 1.29, category: "bakery", image: "https://cdn.pixabay.com/photo/2016/03/28/20/18/bread-1792134_1280.jpg", description: "250g" },
+      { id: 32, name: "Croissants", price: 0.99, category: "bakery", image: "https://cdn.pixabay.com/photo/2015/07/04/12/58/croissants-842730_1280.jpg", description: "60g (par pièce)" },
+      { id: 33, name: "Pain de mie", price: 2.49, category: "bakery", image: "https://cdn.pixabay.com/photo/2016/04/18/18/15/sliced-bread-1330148_1280.jpg", description: "500g" },
+      { id: 34, name: "Pain aux céréales", price: 2.99, category: "bakery", image: "https://cdn.pixabay.com/photo/2017/03/01/11/13/bread-2080491_1280.jpg", description: "500g" },
+      { id: 35, name: "Brioche", price: 3.49, category: "bakery", image: "https://cdn.pixabay.com/photo/2014/10/16/17/01/brioche-485171_1280.jpg", description: "250g" },
+      { id: 36, name: "Muffins", price: 2.99, category: "bakery", image: "https://cdn.pixabay.com/photo/2016/10/11/18/06/muffins-1722309_1280.jpg", description: "250g" },
+      { id: 37, name: "Tarte aux pommes", price: 7.99, category: "bakery", image: "https://cdn.pixabay.com/photo/2017/09/30/00/30/apple-pie-2801946_1280.jpg", description: "230g" },
+      { id: 38, name: "Pain au chocolat", price: 1.29, category: "bakery", image: "https://cdn.pixabay.com/photo/2015/07/08/13/10/chocolate-croissant-842344_1280.jpg", description: "60g (par pièce)" },
+      { id: 39, name: "Biscuits", price: 2.99, category: "bakery", image: "https://cdn.pixabay.com/photo/2015/12/09/17/52/cookies-1083390_1280.jpg", description: "200g" },
+      { id: 40, name: "Gâteau au chocolat", price: 9.99, category: "bakery", image: "https://cdn.pixabay.com/photo/2016/11/21/15/52/chocolate-cake-1841401_1280.jpg", description: "500g" },
+      { id: 41, name: "Steak de boeuf", price: 8.99, category: "meat", image: "https://cdn.pixabay.com/photo/2016/09/20/15/11/beef-1570362_1280.jpg", description: "1kg" },
+      { id: 42, name: "Poulet entier", price: 6.99, category: "meat", image: "https://cdn.pixabay.com/photo/2016/10/25/00/59/chicken-1758311_1280.jpg", description: "1.5kg" },
+      { id: 43, name: "Saumon frais", price: 12.99, category: "fish", image: "https://cdn.pixabay.com/photo/2017/03/11/19/20/salmon-2132882_1280.jpg", description: "500g" },
+      { id: 44, name: "Crevettes", price: 9.99, category: "fish", image: "https://cdn.pixabay.com/photo/2015/06/24/12/39/shrimp-842787_1280.jpg", description: "250g" },
+      { id: 45, name: "Pizza surgelée", price: 4.99, category: "frozen", image: "https://cdn.pixabay.com/photo/2016/09/24/20/44/pizza-1695134_1280.jpg", description: "400g" },
+      { id: 46, name: "Légumes surgelés", price: 3.49, category: "frozen", image: "https://cdn.pixabay.com/photo/2016/07/16/17/03/frozen-1501172_1280.jpg", description: "500g" },
+      { id: 47, name: "Eau minérale", price: 1.99, category: "beverages", image: "https://cdn.pixabay.com/photo/2015/08/28/00/22/mineral-water-363167_1280.jpg", description: "1.5 litres" },
+      { id: 48, name: "Jus d'orange", price: 2.49, category: "beverages", image: "https://cdn.pixabay.com/photo/2016/06/15/22/48/orange-1463365_1280.jpg", description: "1 litre" },
+      { id: 49, name: "Chips", price: 1.99, category: "snacks", image: "https://cdn.pixabay.com/photo/2016/01/26/00/40/chips-1168824_1280.jpg", description: "200g" },
+      { id: 50, name: "Chocolat", price: 2.99, category: "snacks", image: "https://cdn.pixabay.com/photo/2017/02/08/18/50/chocolate-2046140_1280.jpg", description: "100g" },
+      { id: 51, name: "Lessive", price: 7.99, category: "household", image: "https://cdn.pixabay.com/photo/2017/01/18/06/44/laundry-detergent-1978579_1280.jpg", description: "1 litre" },
+      { id: 52, name: "Papier toilette", price: 4.99, category: "household", image: "https://cdn.pixabay.com/photo/2016/03/28/19/47/toilet-paper-1785547_1280.jpg", description: "12 rouleaux" },
+      { id: 53, name: "Shampooing", price: 3.99, category: "personal_care", image: "https://cdn.pixabay.com/photo/2016/02/18/20/15/shampoo-1203062_1280.jpg", description: "300ml" },
+      { id: 54, name: "Dentifrice", price: 2.49, category: "personal_care", image: "https://cdn.pixabay.com/photo/2016/10/24/15/21/toothpaste-974519_1280.jpg", description: "75ml" },
+      { id: 55, name: "Asperges", price: 3.99, category: "seasonal", image: "https://cdn.pixabay.com/photo/2015/03/30/20/45/asparagus-700153_1280.jpg", description: "Environ 250g" },
+      { id: 56, name: "Fraises", price: 2.99, category: "seasonal", image: "https://cdn.pixabay.com/photo/2016/04/15/08/04/strawberry-1330459_1280.jpg", description: "Environ 250g (2-3 fraises)" },
+      { id: 57, name: "Vin rouge -30%", price: 5.99, category: "promotions", image: "https://cdn.pixabay.com/photo/2016/10/22/20/34/wine-1761613_1280.jpg", description: "750ml" },
+      { id: 58, name: "Chocolat -20%", price: 1.99, category: "promotions", image: "https://cdn.pixabay.com/photo/2013/09/18/18/24/chocolate-183543_1280.jpg", description: "100g" },
+    ];
+
+    let cart = [];
+    let favorites = [];
+
+    window.handleImageError = function(img) {
+      if (img) {
+        img.onerror = null;
+        img.src = 'https://via.placeholder.com/200x150?text=Image+Not+Available';
+      }
+    };
+
+    window.initCarousel = function() {
+      const images = document.querySelectorAll('.carousel-image');
+      let currentIndex = 0;
+
+      function showNextImage() {
+        images[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % images.length;
+        images[currentIndex].classList.add('active');
+      }
+
+      images.forEach(img => {
+        img.onerror = () => handleImageError(img);
+      });
+
+      images[currentIndex].classList.add('active');
+      setInterval(showNextImage, 6000);
+    };
+
+    window.toggleFavorite = function(productId, element) {
+      const index = favorites.indexOf(productId);
+      if (index === -1) {
+        favorites.push(productId);
+        element.classList.add('active');
+      } else {
+        favorites.splice(index, 1);
+        element.classList.remove('active');
+      }
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    };
+
+    window.showPage = function(pageId) {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => {
+        if (page) {
+          page.style.display = page.id === pageId ? 'block' : 'none';
+        }
+      });
+    };
+
+    window.showCategory = function(category) {
+      const productGrid = safeGetElement('productGrid');
+      if (!productGrid) {
+        console.error('Product grid element not found');
+        return;
+      }
+      productGrid.innerHTML = '';
+      
+      const filteredProducts = category === 'all' ? products : products.filter(p => p.category === category);
+      
+      if (filteredProducts.length === 0) {
+        productGrid.innerHTML = '<p>Aucun produit dans la liste.</p>';
+      } else {
+        filteredProducts.forEach(product => {
+          if (product && product.id && product.name && product.price && product.image && product.description) {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            const isFavorite = favorites.includes(product.id) ? 'active' : '';
+            productCard.innerHTML = `
+              <div class="favorite-icon ${isFavorite}" onclick="toggleFavorite(${product.id}, this)">❤</div>
+              <img src="${product.image}" alt="${product.name}" class="product-image" onerror="handleImageError(this)">
+              <div class="product-title">${product.name}</div>
+              <div class="product-description">${product.description}</div>
+              <div class="product-price">${product.price.toFixed(2)} CHF</div>
+              <button class="add-to-cart" onclick="addToCart(${product.id})">Ajouter au panier</button>
+            `;
+            productGrid.appendChild(productCard);
+          }
+        });
+      }
+    };
+
+    window.initializeSearch = function() {
+      const searchInput = safeGetElement('searchInput');
+      const searchResults = safeGetElement('searchResults');
+
+      if (searchInput && searchResults) {
+        searchInput.addEventListener('input', function() {
+          const searchTerm = this.value.toLowerCase();
+          if (searchTerm.length < 2) {
+            searchResults.style.display = 'none';
+            return;
+          }
+
+          const filteredProducts = products.filter(product => 
+            product.name.toLowerCase().includes(searchTerm) || 
+            product.description.toLowerCase().includes(searchTerm)
+          );
+
+          searchResults.innerHTML = '';
+          filteredProducts.forEach(product => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'search-result-item';
+            resultItem.innerHTML = `
+              <img src="${product.image}" alt="${product.name}" class="search-result-image" onerror="handleImageError(this)">
+              <div class="search-result-info">
+                <div class="search-result-name">${product.name}</div>
+                <div class="search-result-description">${product.description}</div>
+              </div>
+              <button class="search-result-add-to-cart" onclick="addToCart(${product.id})">Ajouter</button>
+            `;
+            searchResults.appendChild(resultItem);
+          });
+
+          searchResults.style.display = filteredProducts.length > 0 ? 'block' : 'none';
+        });
+
+        document.addEventListener('click', function(event) {
+          if (!searchResults.contains(event.target) && event.target !== searchInput) {
+            searchResults.style.display = 'none';
+          }
+        });
+      }
+    };
+
+    window.addToCart = function(productId) {
+      const product = products.find(p => p.id === productId);
+      if (product) {
+        const existingItem = cart.find(item => item.id === productId);
+        if (existingItem) {
+          existingItem.quantity++;
+        } else {
+          cart.push({ ...product, quantity: 1 });
+        }
+        updateCart();
+        updateCartIcon();
+        showAddToCartAnimation();
+      }
+    };
+
+    window.updateCartIcon = function() {
+      const cartBadge = safeGetElement('cartBadge');
+      if (cartBadge) {
+        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+        cartBadge.textContent = totalItems;
+      }
+    };
+
+    window.updateCart = function() {
+      try {
+        const cartItems = safeGetElement('cartItems');
+        const cartTotal = safeGetElement('cartTotal');
+        if (!cartItems || !cartTotal) {
+          console.error('Cart elements not found');
+          return;
+        }
+        cartItems.innerHTML = '';
+        let subtotal = 0;
+
+        let deliveryFee;
+        let deliveryMessage = '';
+
+        if (!selectedPostalCode || selectedPostalCode === '') {
+          deliveryFee = 49.99;
+          deliveryMessage = 'Malheureusement, nous ne livrons pas à cette adresse, mais si vous voulez, nous pouvons vous envoyer une course personnalisée qui vous coûtera 49,99 CHF.';
+        } else {
+          switch (selectedPostalCode) {
+            case '8820 Wädenswil - Hangenmoos':
+              deliveryFee = 2.99;
+              break;
+            case '8820 Wädenswil':
+              deliveryFee = 4.99;
+              break;
+            case '8805 Richterswil':
+            case '8833 Samstagern':
+              deliveryFee = 6.99;
+              break;
+            case '8810 Horgen':
+            case '8816 Hirzel':
+              deliveryFee = 9.99;
+              break;
+            default:
+              deliveryFee = 5.99;
+          }
+        }
+
+        if (cart.length === 0) {
+          cartItems.innerHTML = '<p>Panier vide</p>';
+        } else {
+          cart.forEach(item => {
+            if (item && item.id && item.name && item.price && item.quantity && item.image) {
+              const cartItem = document.createElement('div');
+              cartItem.className = 'cart-item';
+              cartItem.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="handleImageError(this)">
+                <div class="cart-item-details">
+                  <div class="cart-item-name">${item.name}</div>
+                  <div class="cart-item-price-qty">
+                    <span class="cart-item-price">${(item.price * item.quantity).toFixed(2)} CHF</span>
+                    <div class="cart-item-quantity">
+                      <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                      <span>${item.quantity}</span>
+                      <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                    </div>
+                  </div>
+                </div>
+              `;
+              cartItems.appendChild(cartItem);
+              subtotal += item.price * item.quantity;
+            }
+          });
+        }
+
+        const total = subtotal + deliveryFee;
+
+        cartTotal.innerHTML = `
+          <div class="cart-summary">
+            <div class="cart-summary-row">
+              <span class="cart-summary-label">Sous-total:</span>
+              <span>${subtotal.toFixed(2)} CHF</span>
+            </div>
+            <div class="cart-summary-row">
+              <span class="cart-summary-label">Frais de livraison:</span>
+              <span>${deliveryFee.toFixed(2)} CHF</span>
+            </div>
+            ${deliveryMessage ? `<div class="cart-summary-row delivery-message">${deliveryMessage}</div>` : ''}
+            <div class="cart-summary-row">
+              <span class="cart-summary-label">Total:</span>
+              <span>${total.toFixed(2)} CHF</span>
+            </div>
+          </div>
+          <button class="checkout-btn" onclick="checkout()">
+            <i class="fas fa-shopping-cart"></i> Valider la commande
+          </button>
+        `;
+      } catch (error) {
+        console.error('Error updating cart:', error);
+      }
+    };
+
+    window.updateQuantity = function(productId, change) {
+      const item = cart.find(i => i.id === productId);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          cart = cart.filter(i => i.id !== productId);
+        }
+        updateCart();
+        updateCartIcon();
+      }
+    };
+
+    window.toggleCart = function() {
+      const cartView = safeGetElement('cartView');
+      if (cartView) {
+        cartView.classList.toggle('active');
+      }
+    };
+
+    window.checkout = function() {
+      if (cart.length === 0) {
+        alert("Votre panier est vide !");
+      } else {
+        alert("Commande validée ! Merci de votre achat.");
+        cart = [];
+        updateCart();
+        updateCartIcon();
+        toggleCart();
+      }
+    };
+
+    window.showHome = function() {
+      showPage('accueilPage');
+    };
+
+    window.showMenu = function() {
+      showPage('menuPage');
+      showCategory('all');
+    };
+
+    window.showFavorites = function() {
+      const productGrid = safeGetElement('productGrid');
+      if (!productGrid) {
+        console.error('Product grid element not found');
+        return;
+      }
+      productGrid.innerHTML = '';
+      
+      const favoriteProducts = products.filter(p => favorites.includes(p.id));
+      
+      if (favoriteProducts.length === 0) {
+        productGrid.innerHTML = '<p>Vous n\'avez pas encore de favoris.</p>';
+      } else {
+        favoriteProducts.forEach(product => {
+          if (product && product.id && product.name && product.price && product.image && product.description) {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+              <div class="favorite-icon active" onclick="toggleFavorite(${product.id}, this)">❤</div>
+              <img src="${product.image}" alt="${product.name}" class="product-image" onerror="handleImageError(this)">
+              <div class="product-title">${product.name}</div>
+              <div class="product-description">${product.description}</div>
+              <div class="product-price">${product.price.toFixed(2)} CHF</div>
+              <button class="add-to-cart" onclick="addToCart(${product.id})">Ajouter au panier</button>
+            `;
+            productGrid.appendChild(productCard);
+          }
+        });
+      }
+      
+      showPage('menuPage');
+    };
+
+    window.confirmDelivery = function() {
+      const address = safeGetElement('addressInput').value;
+      const statusElement = safeGetElement('deliveryStatus');
+      const newsletterSignup = safeGetElement('newsletterSignup');
+
+      if (address === '') {
+        alert("Veuillez sélectionner une adresse de livraison.");
+        return;
+      }
+
+      const deliverableAddresses = [
+        '8820 Wädenswil - Hangenmoos',
+        '8820 Wädenswil',
+        '8804 Au ZH',
+        '8805 Richterswil',
+        '8833 Samstagern',
+        '8810 Horgen',
+        '8816 Hirzel'
+      ];
+
+      if (deliverableAddresses.includes(address)) {
+        if (statusElement) {
+          statusElement.textContent = "Nous pouvons livrer à cette adresse ! Vous pouvez maintenant accéder au menu.";
+          statusElement.style.color = "green";
+        }
+        if (newsletterSignup) newsletterSignup.style.display = 'none';
+        selectedPostalCode = address;
+        setTimeout(() => showMenu(), 2000);
+      } else {
+        if (statusElement) {
+          statusElement.textContent = "Désolé, nous ne livrons pas encore à cette adresse, mais promis dès qu'on peut on vous tiendra au courant!";
+          statusElement.style.color = "red";
+        }
+        if (newsletterSignup) newsletterSignup.style.display = 'block';
+        selectedPostalCode = ''; 
+      }
+    };
+
+    window.signupNewsletter = function() {
+      const email = safeGetElement('newsletterEmail').value;
+      if (email.trim() === '') {
+        alert("Veuillez entrer une adresse e-mail valide.");
+        return;
+      }
+      alert("Merci de vous être inscrit à notre newsletter. Nous vous tiendrons informé des nouveautés !");
+      if (safeGetElement('newsletterEmail')) safeGetElement('newsletterEmail').value = '';
+    };
+
+    window.showAddToCartAnimation = function() {
+      const animation = document.createElement('div');
+      animation.className = 'cart-animation';
+      animation.textContent = '+1';
+      document.body.appendChild(animation);
+
+      const cartBadge = safeGetElement('cartBadge');
+      if (!cartBadge) {
+        console.error('Cart badge element not found');
+        document.body.removeChild(animation);
+        return;
+      }
+      const rect = cartBadge.getBoundingClientRect();
+
+      animation.style.top = `${rect.top}px`;
+      animation.style.left = `${rect.left}px`;
+      animation.style.opacity = '1';
+      animation.style.transform = 'translateY(-20px)';
+
+      setTimeout(() => {
+        animation.style.opacity = '0';
+        animation.style.transform = 'translateY(-40px)';
+      }, 100);
+
+      setTimeout(() => {
+        document.body.removeChild(animation);
+      }, 400);
+    };
+
+    window.toggleAssistance = function() {
+      const popup = safeGetElement('assistancePopup');
+      if (popup) {
+        popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        if (popup.style.display === 'block') {
+          startAssistanceChat();
+        }
+      }
+    };
+
+    window.startAssistanceChat = function() {
+      const chatMessages = safeGetElement('chatMessages');
+      if (chatMessages) {
+        chatMessages.innerHTML = '';
+        addBotMessage("Bonjour ! Je suis ravi de vous aider aujourd'hui. Avant de commencer quelques questions :");
+        addBotMessage("Habitez-vous dans l'un de ces codes postaux ?<br><br>" +
+          "8820 Wädenswil - 8804 Au ZH - 8805 Richterswil - 8833 Samstagern - 8810 Horgen - 8816 Hirzel", [
+          { text: "Oui", onClick: () => handlePostalCodeResponse(true) },
+          { text: "Non", onClick: () => handlePostalCodeResponse(false) }
+        ]);
+      }
+    };
+
+    window.handlePostalCodeResponse = function(inServiceArea) {
+      if (inServiceArea) {
+        addUserMessage("Oui");
+        addBotMessage("Super ! Voulez-vous passer une commande unique ou organiser une livraison hebdomadaire ?", [
+          { text: "Commande unique", onClick: () => handleDeliveryType('single') },
+          { text: "Livraison hebdomadaire", onClick: () => handleDeliveryType('weekly') }
+        ]);
+      } else {
+        addUserMessage("Non");
+        addBotMessage("Nous sommes désolés, mais nous ne livrons pas encore dans votre région. Veuillez nous contacter par email à info@lespecialgout.ch ou par téléphone au +41 123 456 789 pour organiser une livraison hebdomadaire.");
+      }
+    };
+
+    window.handleDeliveryType = function(type) {
+      if (type === 'weekly') {
+        addUserMessage("Livraison hebdomadaire");
+        addBotMessage("Pour organiser une livraison hebdomadaire, veuillez nous contacter par email à info@lespecialgout.ch ou par téléphone au +41 123 456 789.");
+      } else {
+        addUserMessage("Commande unique");
+        addBotMessage("D'accord, vous pouvez maintenant envoyer votre commande en texte et appuyer sur envoyer. Nous vous contacterons pour organiser les modalités de livraison et confirmer votre panier.");
+        showTextInput();
+      }
+    };
+
+    window.addUserMessage = function(message) {
+      const chatMessages = safeGetElement('chatMessages');
+      if (chatMessages) {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'chat-message user';
+        messageElement.innerHTML = `<div class="chat-bubble">${message}</div>`;
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    };
+
+    window.addBotMessage = function(message, options = []) {
+      const chatMessages = safeGetElement('chatMessages');
+      if (chatMessages) {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'chat-message bot';
+        messageElement.innerHTML = `<div class="chat-bubble">${message}</div>`;
+        
+        if (options.length > 0) {
+          const optionsContainer = document.createElement('div');
+          optionsContainer.className = 'chat-options';
+          options.forEach(option => {
+            const button = document.createElement('button');
+            button.className = 'chat-option-btn';
+            button.textContent = option.text;
+            button.onclick = option.onClick;
+            optionsContainer.appendChild(button);
+          });
+          messageElement.appendChild(optionsContainer);
+        }
+        
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    };
+
+    window.showTextInput = function() {
+      const chatInput = safeGetElement('chatInput');
+      if (chatInput) {
+        chatInput.style.display = 'flex';
+      }
+    };
+
+    window.sendMessage = function() {
+      const userInput = safeGetElement('userInput');
+      if (userInput) {
+        const message = userInput.value.trim();
+        if (message) {
+          addUserMessage(message);
+          userInput.value = '';
+          setTimeout(() => {
+            addBotMessage("Merci pour votre commande. Nous la traiterons dans les plus brefs délais et vous contacterons pour confirmer les détails de la livraison.");
+          }, 1000);
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initCarousel();
+      initializeSearch();
+      updateCart();
+      updateCartIcon();
+    });
+  </script>
+</body>
+</html>
